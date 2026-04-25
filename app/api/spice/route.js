@@ -2,27 +2,59 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const { ingredients, flavors, cuisines } = body;
-    const MANDRILL_SPICES = ["純カレー粉","純カレー粉辛味抜き","ブラウンマスタードホール","クミンパウダーorホール","ターメリックパウダー","コリアンダーパウダー","パプリカパウダー","ガラムマサラパウダー","オールスパイスパウダー","クローブパウダー","シナモンパウダー","ブラックペッパーパウダー","カルダモンパウダー","ジンジャーパウダー","チリペッパーパウダー","カレフリベーシック","カレフリスパイシー"];
+
+    const MANDRILL_SPICES = [
+      "純カレー粉","純カレー粉辛味抜き","ブラウンマスタードホール",
+      "クミンパウダーorホール","ターメリックパウダー","コリアンダーパウダー",
+      "パプリカパウダー","ガラムマサラパウダー","オールスパイスパウダー",
+      "クローブパウダー","シナモンパウダー","ブラックペッパーパウダー",
+      "カルダモンパウダー","ジンジャーパウダー","チリペッパーパウダー",
+      "カレフリベーシック","カレフリスパイシー",
+    ];
+
     const parts = [`食材：${ingredients.join("、")}`];
     if (flavors?.length) parts.push(`希望する味：${flavors.join("、")}`);
     if (cuisines?.length) parts.push(`料理ジャンル：${cuisines.join("、")}`);
+
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) return Response.json({ error: "APIキーなし" }, { status: 500 });
+    if (!apiKey) {
+      return Response.json({ error: "APIキーが設定されていません" }, { status: 500 });
+    }
+
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+      },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-haiku-4-5-20251001",
         max_tokens: 1200,
-        system: `あなたはMANDRILL CURRYのスパイス専門家です。必ず以下からのみ選んでください。【ラインナップ】${MANDRILL_SPICES.join("、")}。JSON形式のみで返答:{"combinations":[{"name":"名前","spices":["s1","s2","s3"],"amounts":["小さじ1","小さじ1/2","少々"],"description":"説明2文","difficulty":"簡単|普通|本格的","flavorProfile":"印象10文字以内"}],"tip":"アドバイス"}3つ提案。`,
+        system: `あなたはMANDRILL CURRYのスパイス専門家です。必ず以下のMANDRILLラインナップの中からのみスパイスを選んでください。
+【ラインナップ】${MANDRILL_SPICES.join("、")}
+以下のJSON形式のみで返答してください（バッククォート不要）:
+{"combinations":[{"name":"名前","spices":["スパイス1","スパイス2","スパイス3"],"amounts":["小さじ1","小さじ1/2","少々"],"description":"特徴と使い方2文","difficulty":"簡単|普通|本格的","flavorProfile":"味の印象10文字以内"}],"tip":"一言アドバイス"}
+3つ提案してください。`,
         messages: [{ role: "user", content: parts.join("\n") }],
       }),
     });
+
     const data = await res.json();
-    if (!res.ok || !data.content) return Response.json({ error: JSON.stringify(data) }, { status: 500 });
+
+    if (!res.ok || data.error) {
+      return Response.json({ error: `APIエラー: ${JSON.stringify(data.error || data)}` }, { status: 500 });
+    }
+
+    if (!data.content || !Array.isArray(data.content)) {
+      return Response.json({ error: `レスポンス形式エラー: ${JSON.stringify(data)}` }, { status: 500 });
+    }
+
     const text = data.content.map(b => b.text || "").join("");
     const clean = text.replace(/```json|```/g, "").trim();
-    return Response.json(JSON.parse(clean));
+    const result = JSON.parse(clean);
+
+    return Response.json(result);
   } catch (e) {
     return Response.json({ error: e.message }, { status: 500 });
   }
