@@ -18,8 +18,8 @@ const FLAVORS = [
 
 const CUISINES = [
   {label:"和風",emoji:"🍱"},{label:"洋風",emoji:"🍝"},{label:"中華",emoji:"🥢"},
-  {label:"韓国風",emoji:"🌶️"},{label:"インド",emoji:"🫙"},{label:"中東",emoji:"🫓"},{label:"メキシカン",emoji:"🌮"},
-  {label:"タイ・東南アジア",emoji:"🌿"},{label:"地中海",emoji:"🫒"},
+  {label:"韓国風",emoji:"🌶️"},{label:"インド",emoji:"🫙"},{label:"中東",emoji:"🫓"},
+  {label:"メキシカン",emoji:"🌮"},{label:"タイ・東南アジア",emoji:"🌿"},{label:"地中海",emoji:"🫒"},
 ];
 
 const ACCENT = ["#E53935","#4FC3F7","#FFD600"];
@@ -47,15 +47,15 @@ function Chip({ label, emoji, selected, onClick }) {
 
 function Section({ num, title, sub, children }) {
   return (
-  <div style={{ background:"#111", borderBottom:"4px solid #FFD600" }}>
-  <div style={{ maxWidth:"680px", margin:"0 auto", padding:"16px 20px", display:"flex", alignItems:"center", gap:"16px" }}>
-    <img src="/ロゴ.png" alt="MANDRILL" style={{ height:"60px", width:"auto" }} />
-    <div>
-      <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,28px)", color:"#fff", letterSpacing:"0.06em" }}>MANDRILL</div>
-      <div style={{ color:"#FFD600", fontSize:"10px", fontWeight:"700", letterSpacing:"0.15em", marginTop:"2px" }}>SPICE COMPASS — CHOICE IS YOURS</div>
+    <div style={{ background:"#fff", border:"2.5px solid #111", padding:"22px", marginBottom:"16px", boxShadow:"5px 5px 0 #111" }}>
+      <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"14px", flexWrap:"wrap" }}>
+        <span style={{ background:"#111", color:"#FFD600", fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"16px", padding:"3px 10px" }}>{num}</span>
+        <span style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"14px", color:"#111", textTransform:"uppercase", letterSpacing:"0.05em" }}>{title}</span>
+        {sub && <span style={{ fontSize:"11px", color:"#999" }}>{sub}</span>}
+      </div>
+      {children}
     </div>
-  </div>
-</div>  );
+  );
 }
 
 export default function Home() {
@@ -83,7 +83,7 @@ export default function Home() {
         body: JSON.stringify({ ingredients, flavors, cuisines }),
       });
       const data = await res.json();
-      setResult(data);
+      if (data.error) { setError(data.error); } else { setResult(data); }
     } catch(e) {
       setError("エラーが発生しました。もう一度お試しください。");
     }
@@ -104,12 +104,8 @@ export default function Home() {
 
       {/* Header */}
       <div style={{ background:"#111", borderBottom:"4px solid #FFD600" }}>
-        <div style={{ maxWidth:"680px", margin:"0 auto", padding:"16px 20px", display:"flex", alignItems:"center", gap:"16px" }}>
-          <span style={{ fontSize:"32px" }}>👑</span>
-          <div>
-            <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,28px)", color:"#fff", letterSpacing:"0.06em" }}>MANDRILL</div>
-            <div style={{ color:"#FFD600", fontSize:"10px", fontWeight:"700", letterSpacing:"0.15em", marginTop:"2px" }}>SPICE COMPASS — CHOICE IS YOURS</div>
-          </div>
+        <div style={{ maxWidth:"680px", margin:"0 auto", padding:"16px 20px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <img src="/ロゴ.png" alt="MANDRILL" style={{ height:"80px", width:"auto" }} />
         </div>
       </div>
       <div style={{ background:"#FFD600", height:"6px", borderBottom:"2.5px solid #111" }} />
@@ -213,7 +209,7 @@ export default function Home() {
             </div>
 
             {/* 全ラインナップ */}
-            <div style={{ background:"#111", border:"2.5px solid #111", padding:"20px", boxShadow:"5px 5px 0 #FFD600" }}>
+            <div style={{ background:"#111", border:"2.5px solid #111", padding:"20px", boxShadow:"5px 5px 0 #FFD600", marginBottom:"28px" }}>
               <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"11px", color:"#FFD600", letterSpacing:"0.15em", marginBottom:"14px", textTransform:"uppercase" }}>
                 CUSTOM BLEND LOG — MANDRILLスパイス全ラインナップ
               </div>
@@ -233,9 +229,28 @@ export default function Home() {
           </div>
         )}
 
-        <div style={{ marginTop:"40px", borderTop:"2.5px solid #111", paddingTop:"16px", textAlign:"center", fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"12px", color:"#111", letterSpacing:"0.15em" }}>
-          MANDRILL™ — CHOICE IS YOURS
+        {/* Footer */}
+        <div style={{ marginTop:"40px", borderTop:"2.5px solid #111", paddingTop:"20px", textAlign:"center" }}>
+          <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"12px", color:"#111", letterSpacing:"0.15em", marginBottom:"16px" }}>
+            MANDRILL™ — CHOICE IS YOURS
+          </div>
+          <a href="https://item.rakuten.co.jp/mandrill/md0080/" target="_blank" rel="noopener noreferrer" style={{
+            display:"inline-block",
+            background:"#BF0000",
+            color:"#fff",
+            fontFamily:"'Arial Black',Arial,sans-serif",
+            fontWeight:"900",
+            fontSize:"14px",
+            padding:"14px 28px",
+            border:"2.5px solid #111",
+            boxShadow:"4px 4px 0 #111",
+            textDecoration:"none",
+            letterSpacing:"0.08em",
+          }}>
+            🛒 楽天でスパイスを購入する
+          </a>
         </div>
+
       </div>
     </div>
   );
