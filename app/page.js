@@ -104,8 +104,12 @@ export default function Home() {
 
       {/* Header */}
       <div style={{ background:"#111", borderBottom:"4px solid #FFD600" }}>
-        <div style={{ maxWidth:"680px", margin:"0 auto", padding:"16px 20px", display:"flex", alignItems:"center", justifyContent:"center" }}>
-          <img src="/ロゴ.png" alt="MANDRILL" style={{ height:"80px", width:"auto" }} />
+        <div style={{ maxWidth:"680px", margin:"0 auto", padding:"20px 24px", display:"flex", alignItems:"center", gap:"16px" }}>
+          <span style={{ fontSize:"32px" }}>👑</span>
+          <div>
+            <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,28px)", color:"#fff", letterSpacing:"0.06em" }}>MANDRILL</div>
+            <div style={{ color:"#FFD600", fontSize:"10px", fontWeight:"700", letterSpacing:"0.15em", marginTop:"2px" }}>SPICE COMPASS — CHOICE IS YOURS</div>
+          </div>
         </div>
       </div>
       <div style={{ background:"#FFD600", height:"6px", borderBottom:"2.5px solid #111" }} />
@@ -234,7 +238,7 @@ export default function Home() {
           <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"12px", color:"#111", letterSpacing:"0.15em", marginBottom:"16px" }}>
             MANDRILL™ — CHOICE IS YOURS
           </div>
-          <a href="https://item.rakuten.co.jp/mandrill/md0080/" target="_blank" rel="noopener noreferrer" style={{
+          <a href="https://item.rakuten.co.jp/mandrill/md0089/" target="_blank" rel="noopener noreferrer" style={{
             display:"inline-block",
             background:"#BF0000",
             color:"#fff",
