@@ -47,15 +47,15 @@ function Chip({ label, emoji, selected, onClick }) {
 
 function Section({ num, title, sub, children }) {
   return (
-    <div style={{ background:"#fff", border:"2.5px solid #111", padding:"22px", marginBottom:"16px", boxShadow:"5px 5px 0 #111" }}>
-      <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"14px", flexWrap:"wrap" }}>
-        <span style={{ background:"#111", color:"#FFD600", fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"16px", padding:"3px 10px" }}>{num}</span>
-        <span style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"14px", color:"#111", textTransform:"uppercase", letterSpacing:"0.05em" }}>{title}</span>
-        {sub && <span style={{ fontSize:"11px", color:"#999" }}>{sub}</span>}
-      </div>
-      {children}
+  <div style={{ background:"#111", borderBottom:"4px solid #FFD600" }}>
+  <div style={{ maxWidth:"680px", margin:"0 auto", padding:"16px 20px", display:"flex", alignItems:"center", gap:"16px" }}>
+    <img src="/ロゴ.png" alt="MANDRILL" style={{ height:"60px", width:"auto" }} />
+    <div>
+      <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,28px)", color:"#fff", letterSpacing:"0.06em" }}>MANDRILL</div>
+      <div style={{ color:"#FFD600", fontSize:"10px", fontWeight:"700", letterSpacing:"0.15em", marginTop:"2px" }}>SPICE COMPASS — CHOICE IS YOURS</div>
     </div>
-  );
+  </div>
+</div>  );
 }
 
 export default function Home() {
