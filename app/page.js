@@ -58,6 +58,61 @@ function Section({ num, title, sub, children }) {
   );
 }
 
+function ShareButtons({ result, ingredients }) {
+  const [copied, setCopied] = useState(false);
+
+  const spiceList = result.combinations?.[0]?.spices?.join("・") || "";
+  const shareText = `🌶️ MANDRILLスパイスコンパスで「${ingredients.join("・")}」に合うスパイスを発見！\n✦ ${spiceList}\nあなたも試してみて👑\nhttps://mandrill-spice.vercel.app/\n#マンドリル #スパイス #CHOICEISYOURS`;
+
+  const shareX = () => {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
+  const shareLine = () => {
+    window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent("https://mandrill-spice.vercel.app/")}&text=${encodeURIComponent(shareText)}`, "_blank");
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(shareText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div style={{ background:"#fff", border:"2.5px solid #111", padding:"20px", boxShadow:"5px 5px 0 #111", marginBottom:"20px" }}>
+      <div style={{ fontFamily:"'Arial Black',Arial,sans-serif", fontWeight:"900", fontSize:"13px", color:"#111", letterSpacing:"0.08em", marginBottom:"14px", textTransform:"uppercase" }}>
+        📣 結果をシェアする
+      </div>
+      <div style={{ display:"flex", gap:"10px", flexWrap:"wrap" }}>
+        <button onClick={shareX} style={{
+          background:"#111", color:"#fff", border:"2.5px solid #111",
+          padding:"10px 20px", fontFamily:"'Arial Black',Arial,sans-serif",
+          fontWeight:"900", fontSize:"13px", cursor:"pointer",
+          boxShadow:"3px 3px 0 #555", flex:1, minWidth:"80px",
+        }}>
+          𝕏 でシェア
+        </button>
+        <button onClick={shareLine} style={{
+          background:"#06C755", color:"#fff", border:"2.5px solid #111",
+          padding:"10px 20px", fontFamily:"'Arial Black',Arial,sans-serif",
+          fontWeight:"900", fontSize:"13px", cursor:"pointer",
+          boxShadow:"3px 3px 0 #111", flex:1, minWidth:"80px",
+        }}>
+          LINE でシェア
+        </button>
+        <button onClick={copyLink} style={{
+          background: copied ? "#FFD600" : "#F5F5F0", color:"#111", border:"2.5px solid #111",
+          padding:"10px 20px", fontFamily:"'Arial Black',Arial,sans-serif",
+          fontWeight:"900", fontSize:"13px", cursor:"pointer",
+          boxShadow:"3px 3px 0 #111", flex:1, minWidth:"80px",
+        }}>
+          {copied ? "✅ コピー済み" : "🔗 コピー"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [input, setInput] = useState("");
   const [ingredients, setIngredients] = useState([]);
@@ -186,6 +241,10 @@ export default function Home() {
                 👑 {result.tip}
               </div>
             )}
+
+            {/* シェアボタン */}
+            <ShareButtons result={result} ingredients={ingredients} />
+
             <div style={{ display:"flex", flexDirection:"column", gap:"16px", marginBottom:"28px" }}>
               {result.combinations?.map((combo,i) => {
                 const ds = DIFFICULTY[combo.difficulty] || DIFFICULTY["普通"];
